@@ -1,7 +1,8 @@
 {
   "name": "project",
   "version": "0.0.1",
-  "dependencies" : {
-    "jquery" : "~> 1.9"
+  "dependencies": {
+    "jquery": "~> 1.9",
+    "todomvc-common": "~0.1.4"
   }
 }
