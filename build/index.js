@@ -1,11 +1,49 @@
-var Index;
-(function (Index) {
-    var HelloWorld = (function () {
-        function HelloWorld() { }
-        HelloWorld.prototype.text = function () {
-            return 'Hello TypeScript!';
+var Core;
+(function (Core) {
+    var HOGe = (function () {
+        function HOGe() { }
+        return HOGe;
+    })();    
+})(Core || (Core = {}));
+;var Todo;
+(function (Todo) {
+    var Todo = (function () {
+        function Todo(title) {
+            this.title = 'untitled';
+            this.completed = false;
+            this.title = title;
+        }
+        Todo.prototype.toggle = function () {
+            this.completed = !this.completed;
         };
-        return HelloWorld;
+        Todo.prototype.attributes = function () {
+            return {
+                title: this.title,
+                completed: this.completed
+            };
+        };
+        return Todo;
     })();
-    Index.HelloWorld = HelloWorld;    
-})(Index || (Index = {}));
+    Todo.Todo = Todo;    
+})(Todo || (Todo = {}));
+;var Todo;
+(function (Todo) {
+    var Todo = (function () {
+        function Todo(title) {
+            this.title = 'untitled';
+            this.completed = false;
+            this.title = title;
+        }
+        Todo.prototype.toggle = function () {
+            this.completed = !this.completed;
+        };
+        Todo.prototype.attributes = function () {
+            return {
+                title: this.title,
+                completed: this.completed
+            };
+        };
+        return Todo;
+    })();
+    Todo.Todo = Todo;    
+})(Todo || (Todo = {}));

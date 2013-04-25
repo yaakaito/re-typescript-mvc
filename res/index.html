@@ -1,10 +1,40 @@
 <!doctype html>
 <html>
   <head>
-    <title>Index</title>
+    <title>Re TypeScript TodoMVC</title>
     <meta charset="utf-8" />
+    <link rel="stylesheet" href="/todomvc/base.css" />
   </head>
   <body>
-  </body>
-  <script type="text/javascript" src="/javascript/index.js"></script>
+    <section id="todoapp">
+      <header id="header">
+        <h1>todos</h1>
+        <input id="new-todo" placeholder="What needs to be done?" autofocus />
+      </header>
+      <section id="main">
+        <input id="toggle-all" type="checkbox" />
+        <label for="toggle-all">Mark all as complete</label>
+        <ul id="todo-list">
+        </ul>
+      </section>
+      <footer id="footer">
+        <span id="todo-count"><strong>0</strong> items left</span>
+        <ul id="filters">
+          <li>
+            <a class="selected" href="#/">All</a>
+          </li>
+          <li>
+            <a href="#/active">Active</a>
+          </li>
+          <li>
+            <a href="#/completed">Completed</a>
+          </li>
+        </ul>
+        <button id="clear-completed">Clear completed</button>
+      </footer>
+    </section>
+    <script src="/todomvc/base.js"></script>
+    <script src="javascript/jquery/jquery.js"></script>
+    <script type="text/javascript" src="/javascript/index.js"></script>
+  </bodfy>
 </html>

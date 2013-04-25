@@ -1,7 +1,2 @@
-module Index {
-    export class HelloWorld {
-        text() : string {
-            return 'Hello TypeScript!';
-        }
-    }
-}
+/// <reference path="./core/model.ts" />
+/// <reference path="./model/todo.ts" />
