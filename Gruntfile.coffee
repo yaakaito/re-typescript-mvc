@@ -3,7 +3,7 @@ module.exports = (grunt) ->
         pkg: grunt.file.readJSON 'package.json'
         typescript:
             compile:
-                src: ['src/index.ts']
+                src: 'src/index.ts'
                 dest: 'compiled/src/index.js'
                 options:
                     module: 'commonjs'
