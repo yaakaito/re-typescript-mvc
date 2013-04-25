@@ -3,8 +3,8 @@ module.exports = (grunt) ->
         pkg: grunt.file.readJSON 'package.json'
         typescript:
             compile:
-                src: ['src/**/*.ts']
-                dest: 'compiled'
+                src: ['src/index.ts']
+                dest: 'compiled/src/index.js'
                 options:
                     module: 'commonjs'
                     target: 'es5'
@@ -51,6 +51,16 @@ module.exports = (grunt) ->
                         cwd: 'res'
                         src: '**'
                         dest: 'public/'
+                    ,
+                        expand: true
+                        cwd: 'components/jquery'
+                        src: 'jquery.js'
+                        dest: 'public/javascript'
+                    ,
+                        expand: true
+                        cwd: 'components/todomvc-common'
+                        src: '**'
+                        dest: 'public/todomvc'
                 ]
 
         connect:
@@ -77,5 +87,5 @@ module.exports = (grunt) ->
     grunt.registerTask 'default', ['type']
     grunt.registerTask 'build', ['concat', 'uglify']
     grunt.registerTask 'generate', ['compile', 'build', 'copy:public']
-    grunt.registerTask 'preview', ['connect:preview', 'regarde']
+    grunt.registerTask 'preview', ['generate', 'connect:preview', 'regarde']
 
