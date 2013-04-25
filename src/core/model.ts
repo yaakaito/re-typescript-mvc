@@ -1,7 +1,7 @@
 module Core {
 
     export interface Model {
-        attributes() : any;
+        attributes(): any;
     }
-    
+
 }
