@@ -1,4 +1,5 @@
-/// <reference path="../../t.ds/jquery.d.ts /">
+/// <reference path="../../d.ts/jquery.d.ts" />
+/// <reference path="./controller.ts" />
 
 module Core {
 
@@ -9,6 +10,9 @@ module Core {
 
     export class BindableView implements View {
 
+        // weak
+        public controller: Controller = null;
+
         element(): JQuery {
             return null;
         }
@@ -18,7 +22,8 @@ module Core {
         }
 
         on(action, selector, callback) : void {
-            this.element().on(action, selector, $.proxy(callback, this));
+            $(selector).on(action, $.proxy(callback, this.controller));
+        //    this.element().on(action, selector, $.proxy(callback, this));
         }
     }
 
