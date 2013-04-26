@@ -24,7 +24,7 @@ module Core {
 
         publish(event): void {
             this.filterTargets({ key : 'event' , value : event }).forEach((target) => {
-                target.call(target.context, arguments);
+                target.callback.call(target.context, arguments);
             });
         }
 
