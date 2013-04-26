@@ -4,7 +4,7 @@
 
 module Todo {
 
-    export class LayoutView implements Core.View {
+    export class LayoutView extends Core.BindableView implements Core.View {
 
         element(): JQuery {
             return $('#body');
