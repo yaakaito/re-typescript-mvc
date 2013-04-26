@@ -1,6 +1,6 @@
 /// <reference path="../core/model.ts" />
 
-module Todo {
+module TodoApp {
 
     export class Todo implements Core.Model {
 

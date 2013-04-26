@@ -2,11 +2,11 @@
 /// <reference path="../model/todo.ts" />
 /// <reference path="../../d.ts/jquery.d.ts" />
 
-module Todo {
+module TodoApp {
 
     export class TodoListView implements Core.View {
 
-        public todos : any[] = [];
+        public todos : any[] = Todos;
 
         element(): JQuery {
             return $('#todo-list');
@@ -60,5 +60,7 @@ module Template {
         html    += '  <button class="destroy"></button>';
         html    += '</div>';
         html    += '<input class="edit" value="' + title + '">';
+
+        return html;
     }
 }
