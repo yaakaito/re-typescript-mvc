@@ -187,14 +187,15 @@ var TodoApp;
     var TodoView = (function () {
         function TodoView() {
             this.todo = null;
-            this.todoElement = null;
+            this.todoElement = $('<li></li>');
         }
         TodoView.prototype.element = function () {
             return this.todoElement;
         };
         TodoView.prototype.render = function () {
+            this.todoElement.html('');
             var htmlString = Template.Todo(this.todo.attributes());
-            this.todoElement = $(htmlString);
+            this.todoElement.append($(htmlString));
         };
         return TodoView;
     })();

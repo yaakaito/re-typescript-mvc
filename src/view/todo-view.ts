@@ -33,15 +33,16 @@ module TodoApp {
     export class TodoView implements Core.View {
 
         public todo: Todo = null;
-        private todoElement: JQuery = null;
+        private todoElement: JQuery = $('<li></li>');
 
         element(): JQuery {
             return this.todoElement;
         }
 
         render(): void {
+            this.todoElement.html('');
             var htmlString = Template.Todo(this.todo.attributes());
-            this.todoElement = $(htmlString);
+            this.todoElement.append($(htmlString));
         }
     }
 
