@@ -1,10 +1,11 @@
 /// <reference path="../../t.ds/jquery.d.ts /">
+/// <reference path="./view.ts" />
+
 
 module Core {
 
     export interface Controller {
-        element(): JQuery;
-        didLoad(): void;
+        view(): Core.View;
     }
 
 }

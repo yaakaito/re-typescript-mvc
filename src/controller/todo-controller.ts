@@ -1,16 +1,14 @@
 /// <reference path="../core/controller.ts" />
-/// <reference path="../../d.ts/jquery.d.ts" />
+/// <reference path="../view/todo-view.ts" />
 
 module Todo {
 
     export class TodoController implements Core.Controller {
 
-        element() : JQuery {
+        private todoListView : TodoListView = new TodoListView();
 
-        }
-
-        didLoad() : void {
-
+        view() : Core.View {
+            return this.todoListView;
         }
     }
     
