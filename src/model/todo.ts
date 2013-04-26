@@ -1,6 +1,7 @@
 /// <reference path="../core/model.ts" />
 
 module Todo {
+
     export class Todo implements Core.Model {
 
         private title : string = 'untitled';
@@ -21,4 +22,6 @@ module Todo {
             };
         }
     }
+
+    export var Todos = [];
 }
