@@ -4,10 +4,10 @@ module Todo {
 
     export class Layout implements Core.Controller {
 
-        private LayoutView: LayoutView = new LayoutView();
+        private layoutView: LayoutView = new LayoutView();
 
         view(): Core.View {
-            return this.applicationView;
+            return this.layoutView;
         }
     }
 }
