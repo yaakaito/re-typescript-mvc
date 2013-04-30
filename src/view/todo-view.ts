@@ -4,9 +4,10 @@
 
 module TodoApp {
 
-    export class TodoListView implements Core.View {
+    export class TodoListView extends Core.BindableView implements Core.View {
 
         public todos : any[] = Todos;
+        private children: any[] = [];
 
         element(): JQuery {
             return $('#todo-list');
@@ -17,6 +18,8 @@ module TodoApp {
             var todos = this.todos;
 
             element.html('');
+            this.children = [];
+
             for (var i = 0, l = todos.length; i < l; i++) {
 
                 () => {
@@ -25,8 +28,17 @@ module TodoApp {
                     view.todo = todo;
                     view.render();
                     element.append(view.element());
+                    this.children.push(view);
                 }()
             }
+        }
+
+        renderAt(index: number): void {
+            this.children[index].render();
+        }
+
+        indexOf(sender: JQuery): number {
+            return $("#todo-list li input.toggle").index($(sender));
         }
     }
 

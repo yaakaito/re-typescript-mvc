@@ -8,6 +8,13 @@ module Core {
         render(): void;
     }
 
+    // (sender, event)
+    var proxy: Function = function(context, callback) {
+        return function(event) {
+            callback.call(context, this, event);
+        }
+    }
+
     export class BindableView implements View {
 
         // weak
@@ -22,8 +29,7 @@ module Core {
         }
 
         on(action, selector, callback) : void {
-            $(selector).on(action, $.proxy(callback, this.controller));
-        //    this.element().on(action, selector, $.proxy(callback, this));
+            $(document.body).on(action, selector, proxy(this.controller, callback));
         }
     }
 

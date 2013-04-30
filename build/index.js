@@ -9,13 +9,14 @@ var TodoApp;
         Layout.prototype.view = function () {
             return this.layoutView;
         };
-        Layout.prototype.addNewTodo = function (event) {
+        Layout.prototype.addNewTodo = function (sender, event) {
             var title = this.view().newTodo.val();
             if(event.which != 13 || title == '') {
                 return;
             }
             var todo = new TodoApp.Todo(title);
             TodoApp.Todos.push(todo);
+            this.view().newTodo.val('');
             Core.mediator.publish('UpdateTodos');
         };
         return Layout;
@@ -28,12 +29,18 @@ var TodoApp;
         function TodoController() {
             this.todoListView = new TodoApp.TodoListView();
             Core.mediator.subscribe(this, 'UpdateTodos', this.updateTodoList);
+            this.view().controller = this;
+            this.view().on('click', 'input.toggle', this.toggleStatus);
         }
         TodoController.prototype.view = function () {
             return this.todoListView;
         };
         TodoController.prototype.updateTodoList = function (event) {
             this.view().render();
+        };
+        TodoController.prototype.toggleStatus = function (sender, event) {
+            var index = this.view().indexOf(sender);
+            TodoApp.Todos[index].toggle();
         };
         return TodoController;
     })();
@@ -91,6 +98,11 @@ var TodoApp;
 })(Core || (Core = {}));
 ;var Core;
 (function (Core) {
+    var proxy = function (context, callback) {
+        return function (event) {
+            callback.call(context, this, event);
+        };
+    };
     var BindableView = (function () {
         function BindableView() {
             this.controller = null;
@@ -102,7 +114,7 @@ var TodoApp;
             return;
         };
         BindableView.prototype.on = function (action, selector, callback) {
-            $(selector).on(action, $.proxy(callback, this.controller));
+            $(document.body).on(action, selector, proxy(this.controller, callback));
         };
         return BindableView;
     })();
@@ -158,19 +170,30 @@ var TodoApp;
     })(Core.BindableView);
     TodoApp.LayoutView = LayoutView;    
 })(TodoApp || (TodoApp = {}));
-;var TodoApp;
+;var __extends = this.__extends || function (d, b) {
+    function __() { this.constructor = d; }
+    __.prototype = b.prototype;
+    d.prototype = new __();
+};
+var TodoApp;
 (function (TodoApp) {
-    var TodoListView = (function () {
+    var TodoListView = (function (_super) {
+        __extends(TodoListView, _super);
         function TodoListView() {
+            _super.apply(this, arguments);
+
             this.todos = TodoApp.Todos;
+            this.children = [];
         }
         TodoListView.prototype.element = function () {
             return $('#todo-list');
         };
         TodoListView.prototype.render = function () {
+            var _this = this;
             var element = this.element();
             var todos = this.todos;
             element.html('');
+            this.children = [];
             for(var i = 0, l = todos.length; i < l; i++) {
                 (function () {
                     var todo = todos[i];
@@ -178,11 +201,18 @@ var TodoApp;
                     view.todo = todo;
                     view.render();
                     element.append(view.element());
+                    _this.children.push(view);
                 })();
             }
         };
+        TodoListView.prototype.renderAt = function (index) {
+            this.children[index].render();
+        };
+        TodoListView.prototype.indexOf = function (sender) {
+            return $("#todo-list li input.toggle").index($(sender));
+        };
         return TodoListView;
-    })();
+    })(Core.BindableView);
     TodoApp.TodoListView = TodoListView;    
     var TodoView = (function () {
         function TodoView() {
