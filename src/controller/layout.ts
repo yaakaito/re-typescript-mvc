@@ -18,7 +18,7 @@ module TodoApp {
             return this.layoutView;
         }
 
-        addNewTodo(event): void {
+        addNewTodo(sender, event): void {
             var title = this.view().newTodo.val();
             if (event.which != 13 || title == '') {
                 return;
@@ -27,7 +27,10 @@ module TodoApp {
             var todo = new Todo(title);
             Todos.push(todo);
 
+            this.view().newTodo.val('');
+        
             Core.mediator.publish('UpdateTodos');
         }
+
     }
 }
