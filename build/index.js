@@ -29,8 +29,12 @@ var TodoApp;
         function TodoController() {
             this.todoListView = new TodoApp.TodoListView();
             Core.mediator.subscribe(this, 'UpdateTodos', this.updateTodoList);
-            this.view().controller = this;
-            this.view().on('click', 'input.toggle', this.toggleStatus);
+            var view = this.view();
+            view.controller = this;
+            view.on('click', 'input.toggle', this.toggleStatus);
+            view.on('dblclick', 'label', this.edit);
+            view.on('keyup', '.edit', this.finishEditOnEnter);
+            view.on('blur', '.edit', this.finishEdit);
         }
         TodoController.prototype.view = function () {
             return this.todoListView;
@@ -39,8 +43,27 @@ var TodoApp;
             this.view().render();
         };
         TodoController.prototype.toggleStatus = function (sender, event) {
-            var index = this.view().indexOf(sender);
+            var index = this.view().toggleIndexOf(sender);
             TodoApp.Todos[index].toggle();
+        };
+        TodoController.prototype.edit = function (sender, event) {
+            var index = this.view().labelIndexOf(sender);
+            this.view().childAt(index).element().addClass('editing');
+        };
+        TodoController.prototype.finishEditOnEnter = function (sender, event) {
+            if(event.which == 13) {
+                this.finishEdit(sender, event);
+            }
+        };
+        TodoController.prototype.finishEdit = function (sender, event) {
+            var index = this.view().editIndexOf(sender);
+            var view = this.view().childAt(index);
+            view.element().removeClass('editing');
+            var val = view.editElement().val();
+            if(val) {
+                TodoApp.Todos[index].updateTitle(val);
+                view.render();
+            }
         };
         return TodoController;
     })();
@@ -135,6 +158,9 @@ var TodoApp;
         Todo.prototype.toggle = function () {
             this.completed = !this.completed;
         };
+        Todo.prototype.updateTitle = function (title) {
+            this.title = title;
+        };
         Todo.prototype.attributes = function () {
             return {
                 title: this.title,
@@ -196,35 +222,48 @@ var TodoApp;
             this.children = [];
             for(var i = 0, l = todos.length; i < l; i++) {
                 (function () {
-                    var todo = todos[i];
                     var view = new TodoView();
-                    view.todo = todo;
+                    view.todoIndex = i;
                     view.render();
                     element.append(view.element());
                     _this.children.push(view);
                 })();
             }
         };
-        TodoListView.prototype.renderAt = function (index) {
-            this.children[index].render();
+        TodoListView.prototype.childAt = function (index) {
+            return this.children[index];
         };
-        TodoListView.prototype.indexOf = function (sender) {
-            return $("#todo-list li input.toggle").index($(sender));
+        TodoListView.prototype.toggleIndexOf = function (sender) {
+            return this.indexOf(sender, "#todo-list li input.toggle");
+        };
+        TodoListView.prototype.labelIndexOf = function (sender) {
+            return this.indexOf(sender, "#todo-list li div label");
+        };
+        TodoListView.prototype.editIndexOf = function (sender) {
+            return this.indexOf(sender, "#todo-list li input.edit");
+        };
+        TodoListView.prototype.indexOf = function (sender, selector) {
+            return $(selector).index($(sender));
         };
         return TodoListView;
     })(Core.BindableView);
     TodoApp.TodoListView = TodoListView;    
     var TodoView = (function () {
         function TodoView() {
-            this.todo = null;
+            this.todoIndex = null;
+            this.editing = false;
             this.todoElement = $('<li></li>');
         }
         TodoView.prototype.element = function () {
             return this.todoElement;
         };
+        TodoView.prototype.editElement = function () {
+            return this.todoElement.find('input.edit');
+        };
         TodoView.prototype.render = function () {
+            var todo = TodoApp.Todos[this.todoIndex];
             this.todoElement.html('');
-            var htmlString = Template.Todo(this.todo.attributes());
+            var htmlString = Template.Todo(todo.attributes(), this.editing);
             this.todoElement.append($(htmlString));
         };
         return TodoView;
@@ -233,11 +272,12 @@ var TodoApp;
 })(TodoApp || (TodoApp = {}));
 var Template;
 (function (Template) {
-    Template.Todo = function (attributes) {
+    Template.Todo = function (attributes, editing) {
         var checked = attributes.completed ? 'checked' : '';
+        var editing = editing ? 'class="editing"' : '';
         var title = attributes.title;
         var html = '';
-        html += '<div class="view">';
+        html += '<div class="view" ' + editing + '>';
         html += '  <input class="toggle" type="checkbox" ' + checked + '>';
         html += '  <label>' + title + '</label>';
         html += '  <button class="destroy"></button>';

@@ -15,6 +15,10 @@ module TodoApp {
             this.completed = !this.completed;
         }
 
+        updateTitle(title: string) : void {
+            this.title = title;
+        }
+
         attributes() : any {
             return {
                 title:     this.title,
